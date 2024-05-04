@@ -7,7 +7,7 @@ and print it to the logs.
 
 This DAG needs a GitHub connection with the name `my_github_conn` and 
 an HTTP connection with the name `open_notify_api_conn`
-and the host `https://api.open-notify.org/` to work.
+and the host `http://api.open-notify.org/` to work.
 
 Additionally you will need to set an Airflow variable with 
 the name `open_notify_api_endpoint` and the value `iss-now.json`.
@@ -59,12 +59,11 @@ def commit_message_checker(repo: Any, trigger_message: str) -> bool | None:
 
 
 @dag(
-    dag_id="find_the_iss",
     start_date=datetime(2024, 1, 1),
     schedule="@daily",
     catchup=False,
     doc_md=__doc__,
-    default_args={"owner": "airflow", "retries": 3},
+    default_args={"owner": "Pedro", "retries": 3},
     tags=["Connections"],
 )
 def find_the_iss():
@@ -78,7 +77,7 @@ def find_the_iss():
         timeout=60 * 60,
         poke_interval=5,
     )
-
+    # this is like using the requests lib
     get_iss_coordinates = HttpOperator(
         task_id="get_iss_coordinates",
         http_conn_id="open_notify_api_conn",
